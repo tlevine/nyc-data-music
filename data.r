@@ -58,9 +58,12 @@ music <- adply(as.character(all.days), 1, function(day) {
     n.rowsUpdated = sum(datasets$rowsUpdatedAt.day == day, na.rm = T),
     prominent.department = names(sort(table(df$attribution), decreasing = T))[1],
     prominent.author = names(sort(table(df$tableAuthor.screenName), decreasing = T))[1],
-    sum.description.length = sum(df$description.length),
-    sum.viewCount = sum(df$viewCount),
-    sum.downloadCount = sum(df$downloadCount),
+    mean.description.length = mean(df$description.length),
+    mean.viewCount = mean(df$viewCount),
+    mean.downloadCount = mean(df$downloadCount),
+    sd.description.length = sd(df$description.length),
+    sd.viewCount = sd(df$viewCount),
+    sd.downloadCount = sd(df$downloadCount),
     n.maps = sum(df$displayType == 'map', na.rm = T),
     n.tables = sum(df$displayType == 'table', na.rm = T),
     n.administrators = sum(df$owner.roleName == 'administrator', na.rm = T),
@@ -69,6 +72,14 @@ music <- adply(as.character(all.days), 1, function(day) {
 })
 music$X1 <- NULL
 rownames(music) <- music$day
+
+# Convert means and sds into instruments.
+music[c('mean.description.length','mean.viewCount','mean.downloadCount', 'sd.description.length','sd.viewCount','sd.downloadCount')] <-
+  lapply(music[c('mean.description.length','mean.viewCount','mean.downloadCount', 'sd.description.length','sd.viewCount','sd.downloadCount')], function(vec) {
+    vec[is.nan(vec)] <- median(vec, na.rm = T)
+    vec[vec > 100] <- 100
+    vec
+  })
 
 beat.one <- c(t(matrix(c(music$n.created, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.created)
 beat.two <- 0.5 * c(t(matrix(c(music$n.published, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.published)
