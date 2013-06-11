@@ -46,3 +46,9 @@ datasets[c("createdAt.day", "publicationDate.day", "viewLastModified.day", "rows
 # Coverage
 day.range <- as.Date(range(na.omit(unique(as.vector(as.matrix(datasets[c("createdAt.day", "publicationDate.day", "viewLastModified.day", "rowsUpdatedAt.day")]))))))
 all.days <- seq(day.range[1], day.range[2], by = "+1 day")
+
+music <- adply(as.character(all.days), 1, function(day) {
+  c(day = day
+  # created = nrow(subset(datasets, createdAt.day == day))
+  )
+})
