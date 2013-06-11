@@ -1,2 +1,16 @@
 library(sqldf)
-datasets <- sqldf('select "publicationDate", "viewLastModified", "id", "createdAt", "displayType", "attribution", "description", "viewCount", "name", "downloadCount", "rowsUpdatedAt", "tableAuthor.screenName", "owner.roleName" from dataset limit 3;', dbname = 'appgen.db')
+datasets <- sqldf('
+SELECT
+  -- Identity
+  "id", "name", "description", "attribution", "displayType",
+
+  -- Dates
+  "createdAt", "publicationDate", "viewLastModified", "rowsUpdatedAt",
+
+  -- Usage
+  "viewCount", "downloadCount",
+  
+  -- Ownership
+  "tableAuthor.screenName", "owner.roleName"
+FROM dataset;
+', dbname = 'appgen.db')
