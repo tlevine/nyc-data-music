@@ -77,7 +77,19 @@ rownames(music) <- music$day
 music[c('mean.description.length','mean.viewCount','mean.downloadCount', 'sd.description.length','sd.viewCount','sd.downloadCount')] <-
   lapply(music[c('mean.description.length','mean.viewCount','mean.downloadCount', 'sd.description.length','sd.viewCount','sd.downloadCount')], function(vec) {
     vec[is.na(vec) | is.nan(vec)] <- median(vec, na.rm = T)
+    vec
+  })
+
+music[c('mean.description.length','mean.viewCount','mean.downloadCount')] <-
+  lapply(music[c('mean.description.length','mean.viewCount','mean.downloadCount')], function(vec) {
     vec[vec > 100] <- 100
+    vec
+  })
+
+music[c('sd.description.length','sd.viewCount','sd.downloadCount')] <-
+  lapply(music[c('sd.description.length','sd.viewCount','sd.downloadCount')], function(vec) {
+    vec <- sqrt(vec)
+    vec[vec > 10] <- 10
     vec
   })
 
