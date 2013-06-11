@@ -40,16 +40,18 @@ datasets[c("createdAt.day", "publicationDate.day", "viewLastModified.day", "rows
   lapply(datasets[c("createdAt", "publicationDate", "viewLastModified", "rowsUpdatedAt")], as.Date)
 
 # Weeks 
-# datasets[c("createdAt.week", "publicationDate.week", "viewLastModified.week", "rowsUpdatedAt.week")] <-
-#   lapply(datasets[c("createdAt", "publicationDate", "viewLastModified", "rowsUpdatedAt")], strftime, format = '%Y-%U')
+datasets[c("createdAt.week", "publicationDate.week", "viewLastModified.week", "rowsUpdatedAt.week")] <-
+  lapply(datasets[c("createdAt", "publicationDate", "viewLastModified", "rowsUpdatedAt")], strftime, format = '%Y-%U')
 
 # Coverage
 day.range <- as.Date(range(na.omit(unique(as.vector(as.matrix(datasets[c("createdAt.day", "publicationDate.day", "viewLastModified.day", "rowsUpdatedAt.day")]))))))
 all.days <- seq(day.range[1], day.range[2], by = "+1 day")
+all.days <- seq(as.Date('2011-07-26'), day.range[2], by = "+1 day")
 
 music <- adply(as.character(all.days), 1, function(day) {
   df <- subset(datasets, createdAt.day == day)
-  c(day = day,
+  data.frame(
+    day = as.Date(day),
     n.created = sum(datasets$createdAt.day == day, na.rm = T),
     n.published = sum(datasets$publicationDate.day == day, na.rm = T),
     n.viewModified = sum(datasets$viewLastModified.day == day, na.rm = T),
