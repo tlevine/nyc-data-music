@@ -69,3 +69,8 @@ music <- adply(as.character(all.days), 1, function(day) {
 })
 music$X1 <- NULL
 rownames(music) <- music$day
+
+beat.one <- c(t(matrix(c(music$n.created, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.created)
+beat.two <- 0.5 * c(t(matrix(c(music$n.published, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.published)
+beat.three <- c(t(matrix(c(music$n.viewModified, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.viewModified)
+beat.four <- 0.5 * c(t(matrix(c(music$n.rowsUpdated, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.rowsUpdated)
