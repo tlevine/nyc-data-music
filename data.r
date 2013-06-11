@@ -94,7 +94,7 @@ music[c('sd.description.length','sd.viewCount','sd.downloadCount')] <-
   })
 
 # Drum beat
-beats <- data.frame(
+beat.dynamics <- data.frame(
   one   = c(t(matrix(c(music$n.created, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.created),
   two   = 0.5 * c(t(matrix(c(music$n.published, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.published),
   three = c(t(matrix(c(music$n.viewModified, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.viewModified),
@@ -102,10 +102,18 @@ beats <- data.frame(
 )
 
 # Melodies
-melodies <- ddply(music, 'day', function(day) {
+melody.pitches <- ddply(music, 'day', function(day) {
   data.frame(
     description.length = rnorm(4, mean = day$mean.description.length, sd = day$sd.description.length),
     viewCount = rnorm(4, mean = day$mean.viewCount, sd = day$sd.viewCount),
     downloadCount = rnorm(4, mean = day$mean.downloadCount, sd = day$sd.downloadCount)
   )
 })
+
+# Chords
+chords <- data.frame(
+  nyc = rep(music$prominent.author == 'NYC OpenData', each = 4),
+  albert = rep(music$prominent.author == 'Albert Webber', each = 4),
+  gary = rep(music$prominent.author == 'Gary A', each = 4),
+)
+chords$other <- 0 == rowSums(chords)
