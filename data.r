@@ -48,11 +48,21 @@ day.range <- as.Date(range(na.omit(unique(as.vector(as.matrix(datasets[c("create
 all.days <- seq(day.range[1], day.range[2], by = "+1 day")
 
 music <- adply(as.character(all.days), 1, function(day) {
+  df <- subset(datasets, createdAt.day == day)
   c(day = day,
     n.created = sum(datasets$createdAt.day == day, na.rm = T),
     n.published = sum(datasets$publicationDate.day == day, na.rm = T),
     n.viewModified = sum(datasets$viewLastModified.day == day, na.rm = T),
-    n.rowsUpdated = sum(datasets$rowsUpdatedAt.day == day, na.rm = T)
+    n.rowsUpdated = sum(datasets$rowsUpdatedAt.day == day, na.rm = T),
+    prominent.department = names(sort(table(df$attribution), decreasing = T))[1],
+    prominent.author = names(sort(table(df$tableAuthor.screenName), decreasing = T))[1],
+    sum.description.length = sum(df$description.length),
+    sum.viewCount = sum(df$viewCount),
+    sum.downloadCount = sum(df$downloadCount),
+    n.maps = sum(df$displayType == 'map', na.rm = T),
+    n.tables = sum(df$displayType == 'table', na.rm = T),
+    n.administrators = sum(df$owner.roleName == 'administrator', na.rm = T),
+    n.publishers = sum(df$owner.roleName == 'publisher', na.rm = T)
   )
 })
 music$X1 <- NULL
