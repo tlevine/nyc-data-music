@@ -44,4 +44,5 @@ datasets[c("createdAt.day", "publicationDate.day", "viewLastModified.day", "rows
 #   lapply(datasets[c("createdAt", "publicationDate", "viewLastModified", "rowsUpdatedAt")], strftime, format = '%Y-%U')
 
 # Coverage
-# days <- na.omit(unique(as.vector(as.matrix(datasets[c("createdAt.day", "publicationDate.day", "viewLastModified.day", "rowsUpdatedAt.day")]))))
+day.range <- as.Date(range(na.omit(unique(as.vector(as.matrix(datasets[c("createdAt.day", "publicationDate.day", "viewLastModified.day", "rowsUpdatedAt.day")]))))))
+all.days <- seq(day.range[1], day.range[2], by = "+1 day")
