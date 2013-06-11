@@ -48,7 +48,12 @@ day.range <- as.Date(range(na.omit(unique(as.vector(as.matrix(datasets[c("create
 all.days <- seq(day.range[1], day.range[2], by = "+1 day")
 
 music <- adply(as.character(all.days), 1, function(day) {
-  c(day = day
-  # created = nrow(subset(datasets, createdAt.day == day))
+  c(day = day,
+    n.created = sum(datasets$createdAt.day == day, na.rm = T),
+    n.published = sum(datasets$publicationDate.day == day, na.rm = T),
+    n.viewModified = sum(datasets$viewLastModified.day == day, na.rm = T),
+    n.rowsUpdated = sum(datasets$rowsUpdatedAt.day == day, na.rm = T)
   )
 })
+music$X1 <- NULL
+rownames(music) <- music$day
