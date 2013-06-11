@@ -76,12 +76,24 @@ rownames(music) <- music$day
 # Convert means and sds into instruments.
 music[c('mean.description.length','mean.viewCount','mean.downloadCount', 'sd.description.length','sd.viewCount','sd.downloadCount')] <-
   lapply(music[c('mean.description.length','mean.viewCount','mean.downloadCount', 'sd.description.length','sd.viewCount','sd.downloadCount')], function(vec) {
-    vec[is.nan(vec)] <- median(vec, na.rm = T)
+    vec[is.na(vec) | is.nan(vec)] <- median(vec, na.rm = T)
     vec[vec > 100] <- 100
     vec
   })
 
-beat.one <- c(t(matrix(c(music$n.created, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.created)
-beat.two <- 0.5 * c(t(matrix(c(music$n.published, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.published)
-beat.three <- c(t(matrix(c(music$n.viewModified, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.viewModified)
-beat.four <- 0.5 * c(t(matrix(c(music$n.rowsUpdated, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.rowsUpdated)
+# Drum beat
+beats <- data.frame(
+  one   = c(t(matrix(c(music$n.created, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.created),
+  two   = 0.5 * c(t(matrix(c(music$n.published, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.published),
+  three = c(t(matrix(c(music$n.viewModified, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.viewModified),
+  four  = 0.5 * c(t(matrix(c(music$n.rowsUpdated, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.rowsUpdated)
+)
+
+# Melodies
+melodies <- ddply(music, 'day', function(day) {
+  data.frame(
+    description.length = rnorm(4, mean = day$mean.description.length, sd = day$sd.description.length),
+    viewCount = rnorm(4, mean = day$mean.viewCount, sd = day$sd.viewCount),
+    downloadCount = rnorm(4, mean = day$mean.downloadCount, sd = day$sd.downloadCount)
+  )
+})
