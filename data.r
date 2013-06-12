@@ -121,3 +121,4 @@ beat.chords <- data.frame(
 beat.chords$other <- 0 == rowSums(beat.chords)
 
 
+l <- sequence(list(sinewave$E3), list(beat.dynamics[1:100]))
