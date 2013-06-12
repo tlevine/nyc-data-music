@@ -94,12 +94,12 @@ music[c('sd.description.length','sd.viewCount','sd.downloadCount')] <-
   })
 
 # Drum beat
-beat.dynamics <- data.frame(
-  one   = c(t(matrix(c(music$n.created, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.created),
-  two   = 0.5 * c(t(matrix(c(music$n.published, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.published),
-  three = c(t(matrix(c(music$n.viewModified, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.viewModified),
-  four  = 0.5 * c(t(matrix(c(music$n.rowsUpdated, rep(0, nrow(music) * 3)), nrow(music), 4))) / max(music$n.rowsUpdated)
-)
+beat.dynamics <- c(t(data.frame(
+  one   = music$n.created / max(music$n.created),
+  two   = music$n.published / max(music$n.published),
+  three = music$n.viewModified / max(music$n.viewModified),
+  four  = music$n.rowsUpdated / max(music$n.rowsUpdated)
+)))
 
 # Melodies
 melody.pitches <- ddply(music, 'day', function(day) {
@@ -111,9 +111,21 @@ melody.pitches <- ddply(music, 'day', function(day) {
 })
 
 # Chords
-chords <- data.frame(
+beat.chords <- data.frame(
   nyc = rep(music$prominent.author == 'NYC OpenData', each = 4),
   albert = rep(music$prominent.author == 'Albert Webber', each = 4),
-  gary = rep(music$prominent.author == 'Gary A', each = 4),
+  gary = rep(music$prominent.author == 'Gary A', each = 4)
 )
-chords$other <- 0 == rowSums(chords)
+beat.chords$other <- 0 == rowSums(beat.chords)
+
+
+
+H <- rnorm(32, mean=0.5, sd=0.1)
+T <- rbinom(32, 1, prob=0.05)
+O <- rbinom(32, 1, prob=0.075)
+K <- rbinom(32, 1, prob=0.2)
+S <- rbinom(32, 1, prob=0.3)
+seqs <- list(H, T, O, K, S)
+
+random_loop <- sequence(wavs, seqs, bpm=59.5, count=1/16)
+
