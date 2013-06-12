@@ -122,4 +122,4 @@ beat.chords$other <- 0 == rowSums(beat.chords)
 
 
 ddr_init(player="/usr/bin/env mplayer'")
-l <- sequence(list(sinewave$E3), list(beat.dynamics))
+l <- sequence(list(roland$SD1), list(beat.dynamics[1:200] ^ (1/4)), bpm = 120, count = 1)
