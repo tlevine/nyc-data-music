@@ -108,7 +108,6 @@ beat.dynamics <- sapply(beat.dynamics, function(x) { max(x, 0.1)})
 downbeat <- (seq_along(beat.dynamics) %% 4) == 1
 beat.dynamics[downbeat] <- sapply(beat.dynamics[downbeat], function(x) { max(x, 0.2)})
 
-
 # Melodies
 melody.pitches <- ddply(music, 'day', function(day) {
   data.frame(
@@ -127,5 +126,25 @@ beat.chords <- data.frame(
 beat.chords$other <- 0 == rowSums(beat.chords)
 
 
+# Compose
 ddr_init(player="/usr/bin/env mplayer'")
-l <- sequence(list(roland$SD1), list(beat.dynamics[1:50] ^ (1/4)), bpm = 120, count = 1/4)
+
+# Beat
+wavs <- list(roland$SD1, roland$SD0)
+
+down.beat <- up.beat <- beat.dynamics[1:50]
+down.beat[(seq_along(down.beat) %% 2) == 1] <- 0
+up.beat[(seq_along(up.beat) %% 2) == 0] <- 0
+seqs <- list(down.beat, up.beat)
+
+beat <- sequence(wavs, seqs, bpm = 120, count = 1/4)
+writeWav(beat, 'beat.wav')
+
+# Melody
+melody.description <- arpeggidata(melody.pitches[1:200,'description.length'], blip)
+writeWav(melody, 'melody-description.wav')
+melody.viewCount <- arpeggidata(melody.pitches[1:200,'viewCount'], piano)
+writeWav(melody, 'melody-viewCount.wav')
+# melody.downloadCount <- arpeggidata(melody.pitches[1:200,'downloadCount'], )
+# writeWav(melody, 'melody-downloadCount.wav')
+
