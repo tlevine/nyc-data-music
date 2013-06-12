@@ -104,9 +104,9 @@ beat.dynamics <- c(t(data.frame(
 ))) ^ (1/4)
 
 # Always make a sound
-beat.dynamics <- sapply(beat.dynamics, function(x) { max(x, 0.15)})
+beat.dynamics <- sapply(beat.dynamics, function(x) { max(x, 0.1)})
 downbeat <- (seq_along(beat.dynamics) %% 4) == 1
-beat.dynamics[downbeat] <- sapply(beat.dynamics[downbeat], function(x) { max(x, 0.30)})
+beat.dynamics[downbeat] <- sapply(beat.dynamics[downbeat], function(x) { max(x, 0.2)})
 
 
 # Melodies
