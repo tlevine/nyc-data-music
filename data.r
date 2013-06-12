@@ -1,4 +1,6 @@
 library(sqldf)
+library(plyr)
+library(ddr)
 datasets <- sqldf('
 SELECT
   -- Identity
@@ -118,14 +120,4 @@ beat.chords <- data.frame(
 )
 beat.chords$other <- 0 == rowSums(beat.chords)
 
-
-
-H <- rnorm(32, mean=0.5, sd=0.1)
-T <- rbinom(32, 1, prob=0.05)
-O <- rbinom(32, 1, prob=0.075)
-K <- rbinom(32, 1, prob=0.2)
-S <- rbinom(32, 1, prob=0.3)
-seqs <- list(H, T, O, K, S)
-
-random_loop <- sequence(wavs, seqs, bpm=59.5, count=1/16)
 
