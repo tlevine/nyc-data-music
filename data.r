@@ -103,6 +103,12 @@ beat.dynamics <- c(t(data.frame(
   four  = music$n.rowsUpdated / max(music$n.rowsUpdated)
 ))) ^ (1/4)
 
+# Always make a sound
+beat.dynamics <- sapply(beat.dynamics, function(x) { max(x, 0.15)})
+downbeat <- (seq_along(beat.dynamics) %% 4) == 1
+beat.dynamics[downbeat] <- sapply(beat.dynamics[downbeat], function(x) { max(x, 0.30)})
+
+
 # Melodies
 melody.pitches <- ddply(music, 'day', function(day) {
   data.frame(
@@ -122,4 +128,4 @@ beat.chords$other <- 0 == rowSums(beat.chords)
 
 
 ddr_init(player="/usr/bin/env mplayer'")
-l <- sequence(list(roland$SD1), list(beat.dynamics[1:200] ^ (1/4)), bpm = 120, count = 1)
+l <- sequence(list(roland$SD1), list(beat.dynamics[1:50] ^ (1/4)), bpm = 120, count = 1/4)
