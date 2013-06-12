@@ -101,7 +101,7 @@ beat.dynamics <- c(t(data.frame(
   two   = music$n.published / max(music$n.published),
   three = music$n.viewModified / max(music$n.viewModified),
   four  = music$n.rowsUpdated / max(music$n.rowsUpdated)
-)))
+))) ^ (1/4)
 
 # Melodies
 melody.pitches <- ddply(music, 'day', function(day) {
@@ -121,4 +121,5 @@ beat.chords <- data.frame(
 beat.chords$other <- 0 == rowSums(beat.chords)
 
 
-l <- sequence(list(sinewave$E3), list(beat.dynamics[1:100]))
+ddr_init(player="/usr/bin/env mplayer'")
+l <- sequence(list(sinewave$E3), list(beat.dynamics))
