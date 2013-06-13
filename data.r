@@ -138,13 +138,13 @@ up.beat[(seq_along(up.beat) %% 2) == 0] <- 0
 seqs <- list(down.beat, up.beat)
 
 beat <- sequence(wavs, seqs, bpm = 120, count = 1/4)
-writeWav(beat, 'beat.wav')
+writeWave(beat, 'beat.wav')
 
 # Melody
 melody.description <- arpeggidata(melody.pitches[1:200,'description.length'], blip)
-writeWav(melody, 'melody-description.wav')
+writeWave(melody.description, 'melody-description.wav')
 melody.viewCount <- arpeggidata(melody.pitches[1:200,'viewCount'], piano)
-writeWav(melody, 'melody-viewCount.wav')
+writeWave(melody.viewCount, 'melody-viewCount.wav')
 # melody.downloadCount <- arpeggidata(melody.pitches[1:200,'downloadCount'], )
 # writeWav(melody, 'melody-downloadCount.wav')
 
